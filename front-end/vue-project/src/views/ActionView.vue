@@ -1,9 +1,9 @@
 <script setup>
-import Home from '../components/Home.vue'
+import Action from '../components/Action.vue'
 </script>
 <style>
 </style>
 
 <template>
-    <Home />
+    <Action />
 </template>

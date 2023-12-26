@@ -1,130 +1,116 @@
-<script setup>
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
-</script>
-<style>
-  body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #cfdde0;
-  }
-
-  header {
-    background-color: rgb(48, 150, 197);
-    color: #fff;
-    padding: 15px;
-    border-radius: 5px;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  nav ul {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-  }
-
-  nav ul li {
-    margin: 0 15px;
-  }
-
-  nav a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-  }
-
-  .auth-buttons {
-    margin-top: 10px;
-  }
-
-  .auth-buttons button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #abbeb7;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-  }
-
-  .action-buttons {
-    margin-top: 20px;
-  }
-
-  .action-buttons button {
-    padding: 10px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-
-  main {
-    margin: 20px;
-    padding: 10px;
-    background-color: white;
-  }
-</style>
-
-
 <template>
-  <div id="app">
-    <header>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Action</a></li>
-        </ul>
-      </nav>
-      <div class="auth-buttons">
-        <button v-if="!loggedIn" @click="signIn">Sign In</button>
-        <button v-if="!loggedIn" @click="signUp">Sign Up</button>
-        <button v-if="loggedIn" @click="signOut">Sign Out</button>
+  <div class="app">
+    <!-- Menu Bar -->
+    <nav class="menu-bar">
+      <ul>
+        <li @click="navigate('/home')">Home</li>
+        <li @click="navigate('/action')">Action</li>
+      </ul>
+      <div class="user-actions">
+        <button v-if="!isLoggedIn" @click="signIn" class="btn">Sign In</button>
+        <button v-if="isLoggedIn" @click="signOut" class="btn">Sign Out</button>
       </div>
-    </header>
-    <main>
-      <div class="action-buttons" >
-        <button @click="addFile">Add File</button>
-      </div>
-    </main>
+    </nav>
+
+    <!-- Body Content -->
+    <div class="content">
+      <h1>Google ads api project hjkljsdjfljsklfgjsdkljgkljjslkfjklsdjfkllsjdklfsdjklfjdsjfdsdljflsdkfjsdojsjfljsdoifjdskjkl</h1>
+      <button @click="addFile" class="btn btn-primary">Add File</button>
+    </div>
   </div>
 </template>
+
+<style scoped>
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh; /* Set a minimum height to cover the entire viewport */
+}
+
+.menu-bar {
+  width: 100%;
+  background-color: #3791be;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-bar ul {
+  list-style-type: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-bar li {
+  text-decoration: solid;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.user-actions button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.content {
+  width: 100%;
+  background-color: white;
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  flex-grow: 1;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+}
+
+</style>
 
 <script>
 export default {
   data() {
     return {
-      loggedIn: false
+      isLoggedIn: false,
     };
   },
   methods: {
-    signIn() {
-      // Implement sign in logic
-      this.loggedIn = true;
+    navigate(page) {
+      console.log(`Navigating to ${page}`);
     },
-    signUp() {
-      // Implement sign up logic
-      this.loggedIn = true;
+    signIn() {
+      this.isLoggedIn = true;
+      console.log('User signed in');
     },
     signOut() {
-      // Implement sign out logic
-      this.loggedIn = false;
+      this.isLoggedIn = false;
+      console.log('User signed out');
     },
     addFile() {
-      // Implement add file logic
-      console.log('Add File clicked');
-    }
-  }
+      console.log('Adding a file');
+    },
+  },
 };
 </script>
-
-<style>
-/* Add your styles here */
-</style>
