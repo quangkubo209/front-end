@@ -26,12 +26,12 @@ const actionList = [
   { fileName: 'File name 1', statusCheckFile: 'OK', statusCheckSystem: 'OK' },
   { fileName: 'File name 2', statusCheckFile: 'OK', statusCheckSystem: 'Error' },
   { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'OK' },
+  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'OK' },
+  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'Error' },
   // Add more items as needed
 ];
 
 const viewDetail = (item) => {
-  // Redirect to another page (replace with your actual route)
-  // For example, redirect to /detail/:itemId
   const itemId = actionList.indexOf(item);
   router.push(`/detail/${itemId}`);
 };
@@ -39,7 +39,11 @@ const viewDetail = (item) => {
 
 <style scoped>
 .action-page {
-  margin: 20px;
+  background-color: rgba(241, 233, 233, 0.8); 
+  height: 100%;
+}
+h1{
+  margin:20px;
 }
 
 .action-list {
@@ -48,6 +52,7 @@ const viewDetail = (item) => {
 }
 
 .action-item {
+  margin:20px;
   margin-bottom: 20px;
   padding: 15px;
   border: 1px solid #ddd;
@@ -82,8 +87,14 @@ const viewDetail = (item) => {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #149BFC;
   color: white;
   border-radius: 3px;
 }
+
+.btn-primary:hover{
+  background-color: rgb(42, 120, 172) ;
+  font-weight: bold;
+}
+
 </style>

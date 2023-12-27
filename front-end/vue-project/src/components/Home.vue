@@ -1,21 +1,23 @@
 <template>
-  <div class="app">
-    <!-- Menu Bar -->
-    <nav class="menu-bar">
-      <ul>
-        <li @click="navigate('/home')">Home</li>
-        <li @click="navigate('/action')">Action</li>
-      </ul>
-      <div class="user-actions">
-        <button v-if="!isLoggedIn" @click="signIn" class="btn">Sign In</button>
-        <button v-if="isLoggedIn" @click="signOut" class="btn">Sign Out</button>
+  <div class="content">
+    <h1>Google ads api project</h1>
+    <div class="add-display">
+      <button @click="addFile" class="btn btn-primary">New File</button>
+      <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" accept=".xlsx" />
+      <h3 v-if="!fileChose" class="file-info">No file chosen</h3>
+      <!-- <h4 v-else class="file-info">
+        File chosen: {{ selectedFileName }}
+      <img src="C:\Users\QuangNN\Downloads\delete-svgrepo-com.svg" alt="Delete" class="trash-icon" @click="deleteFile" />
+      </h4> -->
+      <div class="display-file" v-else>
+        <h4 class="file-info">
+        File chosen: {{ selectedFileName }}
+      </h4>
+      <img src="C:\Users\QuangNN\Downloads\delete-svgrepo-com.svg" alt="Delete" class="trash-icon" @click="deleteFile" />
       </div>
-    </nav>
-
-    <!-- Body Content -->
-    <div class="content">
-      <h1>Google ads api project hjkljsdjfljsklfgjsdkljgkljjslkfjklsdjfkllsjdklfsdjklfjdsjfdsdljflsdkfjsdojsjfljsdoifjdskjkl</h1>
-      <button @click="addFile" class="btn btn-primary">Add File</button>
+    </div>
+    <div>
+      <!-- Additional content goes here -->
     </div>
   </div>
 </template>
@@ -26,50 +28,49 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: rgba(241, 233, 233, 0.8); 
 }
 
 .app {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 100vh; /* Set a minimum height to cover the entire viewport */
+  min-height: 100vh;
 }
 
-.menu-bar {
-  width: 100%;
-  background-color: #3791be;
-  color: white;
-  padding: 10px;
+.add-display {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
+/* Spread items evenly */
+  /* flex-wrap: wrap; */
+}
+
+.display-file{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
 }
 
-.menu-bar ul {
-  list-style-type: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
+.trash-icon{
+  height:40px;
+  width:40px;
 }
 
-.menu-bar li {
-  text-decoration: solid;
-  margin-right: 20px;
+.trash-icon:hover {
   cursor: pointer;
-}
 
-.user-actions button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
+}
+.file-info {
+  margin: 10px 0; /* Add margin for better spacing */
+  
 }
 
 .content {
   width: 100%;
-  background-color: white;
-  margin-top: 10px;
+  height: 100vh;
+  background-color: rgba(241, 233, 233, 0.8); 
   padding: 20px;
   border: 1px solid #ccc;
   flex-grow: 1;
@@ -82,9 +83,15 @@ body, html {
 }
 
 .btn-primary {
-  margin-top: 10px;
-  background-color: #007bff;
+  border-radius: 3px;
+  background-color: #149BFC;
   color: white;
+  width: fit-content;
+}
+
+.btn-primary:hover {
+  background-color: rgb(42, 120, 172);
+  font-weight: bold;
 }
 
 </style>
@@ -94,10 +101,13 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      fileChose: false,
+      selectedFileName: '',
     };
   },
   methods: {
     navigate(page) {
+      this.$router.push(page);
       console.log(`Navigating to ${page}`);
     },
     signIn() {
@@ -109,8 +119,36 @@ export default {
       console.log('User signed out');
     },
     addFile() {
-      console.log('Adding a file');
+      // Trigger the file input click
+      this.$refs.fileInput.click();
     },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.fileChose = true;
+        this.selectedFileName = file.name;
+        console.log('File selected:', file.name);
+      }
+    },
+    // Trong phương thức deleteFile
+deleteFile() {
+  if (confirm("Are you sure you want to delete the file?")) {
+    this.fileChose = false;
+    this.selectedFileName = '';
+
+    const fileList = [fileChose]; // Thay thế bằng danh sách thực tế
+
+    // Xác định vị trí của file trong danh sách và loại bỏ nó
+    const fileIndex = fileList.findIndex(file => file.name === this.selectedFileName);
+    if (fileIndex !== -1) {
+      fileList.splice(fileIndex, 1);
+      console.log('File deleted');
+    } else {
+      console.error('File not found in the list');
+    }
+  }
+}
+
   },
 };
 </script>
