@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePageView.vue'
-import Home from '../views/HomeView.vue'
+import UploadFile from '../views/UploadFileView.vue'
+import ActionView from '../views/ActionView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,12 +12,12 @@ const router = createRouter({
       children:[
       {
         path: '',
-        component: Home
+        component: UploadFile
       },
       {
       path: '/action',
       name: 'action',
-      component: () => import('../views/ActionView.vue')
+      component: ActionView,
     }
   ],
 }

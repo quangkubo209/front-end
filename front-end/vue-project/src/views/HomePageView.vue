@@ -1,8 +1,10 @@
 <!-- DefaultLayout.vue -->
 <template>
   <div>
-    <Header @navigate="navigate" />
-    <router-view></router-view>
+    <Header class="header" @navigate="navigate" />
+    <div class="body">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -20,3 +22,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.header{
+  height: 8vh;
+}
+.body{
+  background-color: rgba(241, 233, 233, 0.8); 
+  height: 100%;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+</style>

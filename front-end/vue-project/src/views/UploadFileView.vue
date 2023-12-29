@@ -2,6 +2,7 @@
 import Home from '../components/Home.vue'
 </script>
 <style>
+
 </style>
 
 <template>

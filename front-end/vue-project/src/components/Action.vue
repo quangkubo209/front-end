@@ -6,8 +6,11 @@
         <div class="file-info">
           <div class="file-name">{{ item.fileName }}</div>
           <div class="status-info">
-            <div>Status Check File: {{ item.statusCheckFile }}</div>
-            <div>Status Check System: {{ item.statusCheckSystem }}</div>
+            <label for="" style="margin-right: 5px;">Status:</label>
+            <div
+              :class="{ 'error-status': item.statusCheckSystem.toLowerCase() === 'error', 'ok-status': item.statusCheckSystem.toLowerCase() === 'success' }">
+               {{ item.statusCheckSystem }}
+            </div>
           </div>
         </div>
         <div class="action-button">
@@ -23,10 +26,10 @@
 
 <script setup>
 const actionList = [
-  { fileName: 'File name 1', statusCheckFile: 'OK', statusCheckSystem: 'OK' },
-  { fileName: 'File name 2', statusCheckFile: 'OK', statusCheckSystem: 'Error' },
-  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'OK' },
-  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'OK' },
+  { fileName: 'File name 1', statusCheckFile: 'SUCCESS', statusCheckSystem: 'SUCCESS' },
+  { fileName: 'File name 2', statusCheckFile: 'SUCCESS', statusCheckSystem: 'Error' },
+  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'SUCCESS' },
+  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'SUCCESS' },
   { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'Error' },
   // Add more items as needed
 ];
@@ -38,12 +41,24 @@ const viewDetail = (item) => {
 </script>
 
 <style scoped>
-.action-page {
-  background-color: rgba(241, 233, 233, 0.8); 
-  height: 100%;
+
+.error-status {
+  color: red;  /* Màu đỏ cho trạng thái 'error' */
 }
-h1{
-  margin:20px;
+
+.ok-status {
+  color: green;  /* Màu xanh cho trạng thái 'ok' */
+}
+.action-page {
+  height: 100vh;
+}
+
+h1 {
+  margin-left: 20px;
+}
+
+ul {
+  margin-bottom: 20px;
 }
 
 .action-list {
@@ -52,10 +67,9 @@ h1{
 }
 
 .action-item {
-  margin:20px;
-  margin-bottom: 20px;
+  margin: 20px;
   padding: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #aa2a2a;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
@@ -74,6 +88,7 @@ h1{
 
 .status-info {
   font-size: 0.9em;
+  display: flex;
 }
 
 .action-button {
@@ -92,9 +107,8 @@ h1{
   border-radius: 3px;
 }
 
-.btn-primary:hover{
-  background-color: rgb(42, 120, 172) ;
+.btn-primary:hover {
+  background-color: rgb(42, 120, 172);
   font-weight: bold;
 }
-
 </style>

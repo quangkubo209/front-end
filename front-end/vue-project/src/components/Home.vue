@@ -1,14 +1,10 @@
-<template>
+<!-- <template>
   <div class="content">
     <h1>Google ads api project</h1>
     <div class="add-display">
       <button @click="addFile" class="btn btn-primary">New File</button>
       <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" accept=".xlsx" />
       <h3 v-if="!fileChose" class="file-info">No file chosen</h3>
-      <!-- <h4 v-else class="file-info">
-        File chosen: {{ selectedFileName }}
-      <img src="C:\Users\QuangNN\Downloads\delete-svgrepo-com.svg" alt="Delete" class="trash-icon" @click="deleteFile" />
-      </h4> -->
       <div class="display-file" v-else>
         <h4 class="file-info">
         File chosen: {{ selectedFileName }}
@@ -17,7 +13,6 @@
       </div>
     </div>
     <div>
-      <!-- Additional content goes here -->
     </div>
   </div>
 </template>
@@ -42,8 +37,6 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-/* Spread items evenly */
-  /* flex-wrap: wrap; */
 }
 
 .display-file{
@@ -63,7 +56,7 @@ body, html {
 
 }
 .file-info {
-  margin: 10px 0; /* Add margin for better spacing */
+  margin: 10px 0; 
   
 }
 
@@ -119,7 +112,6 @@ export default {
       console.log('User signed out');
     },
     addFile() {
-      // Trigger the file input click
       this.$refs.fileInput.click();
     },
     handleFileChange(event) {
@@ -130,15 +122,13 @@ export default {
         console.log('File selected:', file.name);
       }
     },
-    // Trong phương thức deleteFile
 deleteFile() {
   if (confirm("Are you sure you want to delete the file?")) {
     this.fileChose = false;
     this.selectedFileName = '';
 
-    const fileList = [fileChose]; // Thay thế bằng danh sách thực tế
+    const fileList = [fileChose]; 
 
-    // Xác định vị trí của file trong danh sách và loại bỏ nó
     const fileIndex = fileList.findIndex(file => file.name === this.selectedFileName);
     if (fileIndex !== -1) {
       fileList.splice(fileIndex, 1);
@@ -149,6 +139,25 @@ deleteFile() {
   }
 }
 
+  },
+};
+</script> -->
+
+
+
+<template>
+  <div>
+    <FileUpload />
+  </div>
+</template>
+
+<script>
+import FileUpload from "@/components/FileUpload.vue";
+
+export default {
+  name: "App",
+  components: {
+    FileUpload,
   },
 };
 </script>
