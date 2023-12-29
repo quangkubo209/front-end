@@ -37,8 +37,24 @@ export default {
             this.checkError();
         },
         downloadErrorFile() {
-            const errorContent = this.generateErrorFileContent();
-            this.downloadFile(errorContent, 'errorFile.txt');
+            const errorData = this.generateErrorFileContent();
+            const ws = XLSX.json_to_sheet([errorData]);
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Error Report');
+
+            const blob = XLSX.write(wb, {bookType: 'xlsx', type: 'blob'});
+
+            const a = document.createElement('a');
+            const blobURL = URL.createObjectURL(blob);
+            a.href = blobURL;
+            a.download = 'errorFile.xlsx';
+
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobURL);
         },
         checkError() {
             if (this.lengthError > 0) {
@@ -56,32 +72,10 @@ export default {
                 "precondition": "chỉ có 2 enum là enable và disable",
             };
 
-            // Tạo nội dung file dưới dạng chuỗi văn bản
-            let fileContent = `Error Report:\n\n`;
-            fileContent += `Total Errors: ${errorData.lengthError}\n\n`;
-
-            for (const key in errorData) {
-                if (key !== 'lengthError') {
-                    fileContent += `${key}: ${errorData[key]}\n`;
-                }
-            }
-
-            return fileContent;
-        },
-        downloadFile(content, fileName) {
-            // Logic để tạo và download file
-            const blob = new Blob([content], { type: 'text/plain' });
-            const blobURL = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = blobURL;
-            a.download = fileName;
-
-            document.body.appendChild(a);
-            a.click();
-
-            document.body.removeChild(a);
-            URL.revokeObjectURL(blobURL);
+            return {
+                "Total Errors: ": errorData.lengthError,
+                ...errorData,
+            };
         },
     },
 };
