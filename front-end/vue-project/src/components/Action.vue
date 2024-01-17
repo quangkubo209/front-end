@@ -1,3 +1,5 @@
+<!-- YourMainComponent.vue -->
+
 <template>
   <div class="action-page">
     <h1>Action Page</h1>
@@ -6,58 +8,72 @@
         <div class="file-info">
           <div class="file-name">{{ item.fileName }}</div>
           <div class="status-info">
-            <label for="" style="margin-right: 5px;">Status:</label>
+            <label for="" style="margin-right: 5px;">Status error: </label>
             <div
-              :class="{ 'error-status': item.statusCheckSystem.toLowerCase() === 'error', 'ok-status': item.statusCheckSystem.toLowerCase() === 'success' }">
-               {{ item.statusCheckSystem }}
+              :class="{ 'error-status': item.status.toLowerCase() === 'true', 'ok-status': item.status.toLowerCase() === 'false' }"
+            >
+              {{ item.status }}
             </div>
           </div>
         </div>
         <div class="action-button">
-          <template v-if="item.statusCheckSystem === 'Error'">
-            <button @click="viewDetail(item)" class="btn btn-primary">View Detail</button>
+          <template v-if="item.status === 'true'">
+            <button @click="openDialog(item)" class="btn btn-primary">View Detail</button>
           </template>
-
         </div>
       </li>
     </ul>
+
+    <Dialog :dialogVisible="dialogVisible" :detail="selectedItem.detail" @closeDialog="closeDialog" />
   </div>
 </template>
 
 <script setup>
-const actionList = [
-  { fileName: 'File name 1', statusCheckFile: 'SUCCESS', statusCheckSystem: 'SUCCESS' },
-  { fileName: 'File name 2', statusCheckFile: 'SUCCESS', statusCheckSystem: 'Error' },
-  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'SUCCESS' },
-  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'SUCCESS' },
-  { fileName: 'File name 3', statusCheckFile: 'Error', statusCheckSystem: 'Error' },
-  // Add more items as needed
-];
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import Dialog from "./Dialog.vue"
 
-const viewDetail = (item) => {
-  const itemId = actionList.indexOf(item);
-  router.push(`/detail/${itemId}`);
+const actionList = ref([]);
+const dialogVisible = ref(false);
+const selectedItem = ref({});
+
+const openDialog = (item) => {
+  selectedItem.value = item;
+  dialogVisible.value = true;
 };
+
+const closeDialog = () => {
+  dialogVisible.value = false;
+};
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/action/actions');
+    console.log('response: ', response.data);
+    actionList.value = response.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+});
+
 </script>
 
 <style scoped>
 
 .error-status {
-  color: red;  /* Màu đỏ cho trạng thái 'error' */
+  color: red; 
 }
 
 .ok-status {
-  color: green;  /* Màu xanh cho trạng thái 'ok' */
+  color: green;  
 }
+
 .action-page {
   height: 100vh;
+  padding: 20px;
 }
 
 h1 {
-  margin-left: 20px;
-}
-
-ul {
   margin-bottom: 20px;
 }
 
@@ -67,7 +83,7 @@ ul {
 }
 
 .action-item {
-  margin: 20px;
+  margin-bottom: 20px;
   padding: 15px;
   border: 1px solid #aa2a2a;
   border-radius: 5px;

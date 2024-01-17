@@ -1,43 +1,79 @@
 <template>
-    <div class="file-upload">
-      <div class="file-upload__area">
-        <div>
-          <label for="file" class="file-upload-label">Select file</label>
-          <input type="file" name="" id="file" accept=".xlsx" />
-        </div>
-        <button class="button-upload" @click="uploadFile">Upload file</button>
-        <div class="flex-container">
-          <h4 v-if="showDownloadButton === true">Invalid file, please download and check it</h4>
-          <button v-if="showDownloadButton === true" @click="downloadErrorFile" class="button-download">Download</button>
-        </div>
+  <div class="file-upload">
+    <div class="file-upload__area">
+      <div>
+        <label for="file" class="file-upload-label">Select file</label>
+        <input type="file" name="" id="file" accept=".xlsx" ref="fileInput" />
+      </div>
+      <button class="button-upload" @click="uploadFile">Upload file</button>
+      <div class="flex-container">
+        <h4 v-if="showDownloadButton === true">Invalid file, please download and check it</h4>
+        <p v-else class="success-message">"File has been validated successfully. Mutation processing is handling!!!</p>        <button v-if="showDownloadButton === true" @click="downloadErrorFile" class="button-download">Download</button>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import * as XLSX from 'xlsx';
-  
-  export default {
-    name: "FileUpload",
-    data() {
-      return {
-        lengthError: 0,
-        showDownloadButton: false,
-      };
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+
+export default {
+  name: "FileUpload",
+  data() {
+    return {
+      lengthError: 0,
+      showDownloadButton: false,
+    };
+  },
+  methods: {
+    async uploadFile() {
+      const formData = new FormData();
+      const fileInput = this.$refs.fileInput;
+
+      formData.append("file", fileInput.files[0]);
+      formData.append("name", "file name");
+      try {
+        const response = await axios.post('http://localhost:8080/api/userlist/validate/excel', formData);
+        console.log("response.data: ", response.data);
+        this.handleValidationResponse(response.data);
+      } catch (error) {
+        console.error('Error while uploading file:', error);
+      }
     },
-    methods: {
-      uploadFile() {
-        const response = {
-          "lengthError": 5,
-          "name": "File name <= 250 , file extension phải là xlsx ",
-          "precondition": "chỉ có 2 enum là enable và disable",
+
+    handleValidationResponse(response) {
+      this.statusError = response.statusError;
+      if(response.statusError === true){
+        this.errors = response.errors;
+      }
+      console.log(this.statusError);
+      this.checkError();
+      this.generateErrorFileContent();
+
+    },
+    generateErrorFileContent() {
+        const errorData = {
+          "lengthError": this.errors.length,
+          error: this.errors.join(',')
         };
   
-        this.lengthError = response.lengthError;
-  
-        this.checkError();
+        return {
+          "Total Errors: ": errorData.lengthError,
+          "Error details": errorData.error,
+        };
       },
-      downloadErrorFile() {
+    checkError() {
+        if (this.statusError === true) {
+          this.showDownloadButton = true;
+          this.generateErrorFileContent();
+          cons
+        } else {
+          this.showDownloadButton = false;
+        }
+      },
+
+  downloadErrorFile() {
         const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
         const errorData = this.generateErrorFileContent();
@@ -60,33 +96,13 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(blobURL);
       },
-      checkError() {
-        if (this.lengthError > 0) {
-          // Hiển thị nút download
-          this.showDownloadButton = true;
-        } else {
-          // Ẩn nút download
-          this.showDownloadButton = false;
-        }
-      },
-      generateErrorFileContent() {
-        const errorData = {
-          "lengthError": 5,
-          "name": "File name <= 250 , file extension phải là xlsx ",
-          "precondition": "chỉ có 2 enum là enable và disable",
-        };
-  
-        return {
-          "Total Errors: ": errorData.lengthError,
-          ...errorData,
-        };
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .file-upload {
+
+  },
+};
+</script>
+
+<style scoped>
+ .file-upload {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -141,5 +157,9 @@
   .button-upload:hover {
     background-color: #096999;
   }
-  </style>
-  
+  .success-message {
+  color: rgb(102, 184, 102);
+  font-weight: bold;
+  margin-top: 10px;
+}
+</style>
